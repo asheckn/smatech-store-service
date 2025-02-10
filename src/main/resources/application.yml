@@ -6,6 +6,7 @@ jwt:
 spring:
   application:
     name: smatech-store-service
+
   datasource:
     password: root
     url: jdbc:postgresql://localhost:5432/smatech-store
@@ -34,3 +35,4 @@ web:
     max-age: 3600
     allowed-headers: "Requestor-Type"
     exposed-headers: "X-Get-Header"
+folder-path: src/main/resources/static/uploads/
