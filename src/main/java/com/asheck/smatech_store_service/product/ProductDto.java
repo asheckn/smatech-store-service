@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record ProductDto(
         String name,
-        long categoryId,
+        Long categoryId,
         String description,
         BigDecimal price,
         BigDecimal vatRate,

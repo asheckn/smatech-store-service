@@ -141,48 +141,50 @@ public class ProductService {
 
 
     @Transactional
-    public Product updateProduct(ProductDto productDto, MultipartFile image, long productId) throws IOException {
+    public Product updateProduct(String name, String description,Long categoryId, BigDecimal price, BigDecimal vatRate, String currencyCode, Integer stock, ProductStatus status, MultipartFile image, long productId) throws IOException {
         // Find existing product
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product with ID " + productId + " not found"));
 
-        Category category = categoryService.getCategoryById(productDto.categoryId());
+
+
 
         // Update product fields
-        if (productDto.name() != null) {
-            product.setName(productDto.name());
+        if (name!= null) {
+            product.setName(name);
         }
-        if (productDto.description() != null) {
-            product.setDescription(productDto.description());
+        if (description != null) {
+            product.setDescription(description);
         }
-        if (productDto.price() != null) {
+        if (price != null) {
             // Verify if the price is greater than 0
-            if(productDto.price().compareTo(BigDecimal.valueOf(0.0)) < 0){
+            if(price.compareTo(BigDecimal.valueOf(0.0)) < 0){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Price cannot be less than 0");
             }
-            product.setPrice(productDto.price());
+            product.setPrice(price);
         }
-        if (productDto.vatRate() != null) {
+        if (vatRate != null) {
             // Verify if the vat rate is greater than 0
-            if(productDto.vatRate().compareTo(BigDecimal.valueOf(0.0)) < 0){
+            if(vatRate.compareTo(BigDecimal.valueOf(0.0)) < 0){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Vat rate cannot be less than 0");
             }
-            product.setVatRate(productDto.vatRate());
+            product.setVatRate(vatRate);
         }
-        if (productDto.currencyCode() != null) {
-            product.setCurrencyCode(productDto.currencyCode());
+        if (currencyCode != null) {
+            product.setCurrencyCode(currencyCode);
         }
-        if (productDto.stock() != null) {
+        if (stock != null) {
             // Verify if the stock is greater than 0
-            if(productDto.stock() < 0){
+            if(stock < 0){
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Stock cannot be less than 0");
             }
-            product.setStock(productDto.stock());
+            product.setStock(stock);
         }
-        if (productDto.status() != null) {
-            product.setStatus(productDto.status());
+        if (status != null) {
+            product.setStatus(status);
         }
-        if (category != null) {
+        if (categoryId != null) {
+            Category category = categoryService.getCategoryById(categoryId);
             product.setCategory(category);
         }
 

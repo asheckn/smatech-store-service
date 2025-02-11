@@ -30,7 +30,7 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne
+    @ManyToOne
     private Category category;
 
     @Column(nullable = false)
