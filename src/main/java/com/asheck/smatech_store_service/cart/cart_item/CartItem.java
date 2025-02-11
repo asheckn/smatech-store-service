@@ -3,6 +3,7 @@ package com.asheck.smatech_store_service.cart.cart_item;
 
 import com.asheck.smatech_store_service.cart.Cart;
 import com.asheck.smatech_store_service.product.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class CartItem {
     @Column(nullable = false)
     private int quantity = 1;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
