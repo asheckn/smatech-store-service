@@ -3,6 +3,7 @@ package com.asheck.smatech_store_service.order.order_item;
 
 import com.asheck.smatech_store_service.order.StoreOrder;
 import com.asheck.smatech_store_service.product.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,12 @@ public class OrderItem {
     private Product product;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal total;
 
     @Column(nullable = false)
     private int quantity = 1;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "storeOrder_id", nullable = false)
     private StoreOrder storeOrder;

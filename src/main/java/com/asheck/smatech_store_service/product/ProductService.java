@@ -106,13 +106,14 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public Product removeStock(String productCode, int stock){
         Product product = productRepository.findProductByProductCode(UUID.fromString(productCode))
                 .orElseThrow(
                         () ->  new ResponseStatusException(HttpStatus.NOT_FOUND, "No product found")
                 );
         if(product.getStock() < stock){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock is less than the requested amount");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, product.getName()+" stock is less than the requested amount");
         }
         product.setStock(product.getStock() - stock);
         return productRepository.save(product);

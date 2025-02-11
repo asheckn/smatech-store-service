@@ -97,6 +97,13 @@ public class CartService {
         return cart;
     }
 
+    public Cart checkOutCart(Long cartId){
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+        cart.setCheckedOut(true);
+        cartRepository.save(cart);
+        return cart;
+    }
+
     public List<Cart> getCartByUser(Long customerId){
         return cartRepository.findCartByCustomerId(customerId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Carts not found"));
     }

@@ -51,7 +51,7 @@ public class StoreOrder {
 
 
     @Column(nullable = false)
-    private long customerId;
+    private Long customerId;
 
     private Boolean deleted = false;
 
@@ -71,12 +71,5 @@ public class StoreOrder {
         }
     }
 
-    public void setCurrency(Currency currency) {
-        this.currencyCode = currency.getCurrencyCode();
-    }
-
-    public Currency getCurrency() {
-        return Currency.getInstance(this.currencyCode);
-    }
 
 }
