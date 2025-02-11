@@ -48,10 +48,8 @@ public class CategoryService {
     //Create category
 
         Category category  = new Category();
-
-        String imagePath = image.getOriginalFilename().trim().replace(' ', '_');
-
         category.setCategoryCode(UUID.randomUUID());
+        String imagePath = "category_"+category.getCategoryCode()+image.getOriginalFilename().trim().replace(' ', '_');
         category.setName(name);
         category.setDeleted(false);
         category.setStatus(true);

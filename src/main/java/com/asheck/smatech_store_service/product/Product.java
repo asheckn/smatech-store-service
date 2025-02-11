@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
@@ -17,6 +19,8 @@ import java.util.UUID;
 @Data
 @Entity
 @RequiredArgsConstructor
+@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Product {
 
     @Id
@@ -45,12 +49,12 @@ public class Product {
     private BigDecimal vatRate;
 
     @Column(nullable = false)
-    private Currency currency;
+    private String currencyCode;
 
     @Column(nullable = false)
     private int stock = 0;
 
-    private double deleted;
+    private Boolean deleted = false;
 
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
@@ -60,6 +64,13 @@ public class Product {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void generateOrderCode() {
+        if (this.productCode == null) {
+            this.productCode = UUID.randomUUID();
+        }
+    }
 
 
 }
