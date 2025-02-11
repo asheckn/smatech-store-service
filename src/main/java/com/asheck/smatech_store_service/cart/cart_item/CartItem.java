@@ -25,7 +25,7 @@ public class CartItem {
     private Product product;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal total;
 
     @Column(nullable = false)
     private int quantity = 1;

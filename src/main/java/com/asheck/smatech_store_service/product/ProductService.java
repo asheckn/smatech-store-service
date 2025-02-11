@@ -139,7 +139,6 @@ public class ProductService {
         productRepository.save(product); // Update instead of delete
     }
 
-
     @Transactional
     public Product updateProduct(String name, String description,Long categoryId, BigDecimal price, BigDecimal vatRate, String currencyCode, Integer stock, ProductStatus status, MultipartFile image, long productId) throws IOException {
         // Find existing product

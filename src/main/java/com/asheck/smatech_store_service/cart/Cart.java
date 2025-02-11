@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,29 +25,38 @@ public class Cart {
     private UUID cartCode;
 
     @Column(nullable = false)
-    private BigDecimal total;
+    private BigDecimal total = BigDecimal.valueOf(0);
 
     @Column(nullable = false)
-    private BigDecimal vatTotal;
+    private BigDecimal vatTotal = BigDecimal.valueOf(0);
 
     @Column(nullable = false)
-    private BigDecimal subTotal;
+    private BigDecimal subTotal = BigDecimal.valueOf(0);
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<CartItem> items;
+    private List<CartItem> items ;
 
     @Column(nullable = false)
     private long customerId;
 
-    private Boolean deleted;
+    private Boolean deleted = false;
 
-    private Boolean checkedOut;
+    private Boolean checkedOut = false;
 
-    private String status;
+    private String status = "active";
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void generateOrderCode() {
+        if (this.cartCode == null) {
+            this.cartCode = UUID.randomUUID();
+        }
+    }
+
+
 }
