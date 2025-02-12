@@ -24,11 +24,13 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
+
 springdoc:
   api-docs:
-    path: /docs
+    enabled: true
   swagger-ui:
     path: /swagger
+
 web:
   cors:
     allowed-origins: "http://localhost:4200"
