@@ -43,7 +43,10 @@ public class OrderService {
         Cart cart = cartService.getCartById(cartId);
         StoreOrder order = new StoreOrder();
 
+            Long lastId = orderRepository.findMaxId();
+            String invoiceNumber = String.format("%05d", (lastId == null ? 1 : lastId + 1));
 
+        order.setInvoiceNumber(invoiceNumber);
         order.setCart(cart);
         order.setCustomerId(cart.getCustomerId());
         order.setOrderTotal(cart.getTotal());
@@ -115,8 +118,8 @@ public class OrderService {
     }
 
     // Update order status
-    public StoreOrder updateOrderStatus(Long orderId, OrderStatus status){
-        StoreOrder order = orderRepository.findById(orderId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
+    public StoreOrder updateOrderStatus(String orderCode, OrderStatus status){
+        StoreOrder order = orderRepository.findStoreOrderByOrderCode(UUID.fromString(orderCode)).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found"));
         order.setOrderStatus(status);
         return orderRepository.save(order);
     }

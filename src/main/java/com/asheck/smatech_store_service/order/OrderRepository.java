@@ -26,4 +26,8 @@ public interface OrderRepository extends JpaRepository<StoreOrder, Long> {
     Page<StoreOrder> findByFilters(@Param("customerId") Long customerId,
                                 @Param("orderStatus") OrderStatus orderStatus,
                                 Pageable pageable);
+
+    @Query("SELECT MAX(s.id) FROM StoreOrder s")
+    Long findMaxId();
+
 }

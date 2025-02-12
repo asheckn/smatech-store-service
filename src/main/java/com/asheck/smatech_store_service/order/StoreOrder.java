@@ -2,6 +2,7 @@ package com.asheck.smatech_store_service.order;
 
 import com.asheck.smatech_store_service.cart.Cart;
 import com.asheck.smatech_store_service.order.order_item.OrderItem;
+import com.asheck.smatech_store_service.store.StoreRepository;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class StoreOrder {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -26,6 +28,9 @@ public class StoreOrder {
 
     @Column(nullable = false)
     private UUID orderCode;
+
+    @Column(nullable = false, unique = true, length = 10)
+    private String invoiceNumber;
 
     @Column(nullable = false)
     private BigDecimal orderTotal;

@@ -48,12 +48,12 @@ public class OrderController {
     }
 
     //Update Order Status
-    @PutMapping("/update-order-status/{orderId}")
+    @PutMapping("/update-order-status/{orderCode}")
     public ResponseEntity<?> updateOrderStatus(
-            @PathVariable Long orderId,
+            @PathVariable String orderCode,
             @RequestParam OrderStatus status
     ){
-        StoreOrder order = orderService.updateOrderStatus(orderId, status);
+        StoreOrder order = orderService.updateOrderStatus(orderCode, status);
         return ResponseEntity.ok(new ApiResponse<>(true, "Order status updated successfully", order));
     }
 
@@ -69,18 +69,18 @@ public class OrderController {
     // complete Order
     @PutMapping("/complete-order/{orderId}")
     public ResponseEntity<?> completeOrder(
-            @PathVariable Long orderId
+            @PathVariable String orderId
     ){
         StoreOrder order = orderService.updateOrderStatus(orderId, OrderStatus.COMPLETE);
         return ResponseEntity.ok(new ApiResponse<>(true, "Order completed successfully", order));
     }
 
     // Pay Order
-    @PutMapping("/pay-order/{orderId}")
+    @PutMapping("/pay-order/{orderCode}")
     public ResponseEntity<?> payOrder(
-            @PathVariable Long orderId
+            @PathVariable String orderCode
     ){
-        StoreOrder order = orderService.updateOrderStatus(orderId, OrderStatus.PAID);
+        StoreOrder order = orderService.updateOrderStatus(orderCode, OrderStatus.PAID);
         // Add kafka Notification later
         return ResponseEntity.ok(new ApiResponse<>(true, "Order paid successfully", order));
     }
