@@ -29,13 +29,13 @@ public class CartController {
         return ResponseEntity.ok(cartService.addCartItem(request, cartId));
     }
 
-    @PatchMapping("/remove-from-cart/{cartId}")
+    @PutMapping("/remove-from-cart/{cartId}")
     public ResponseEntity<?> removeFromCart(@RequestParam Long cartItemId, @PathVariable Long cartId){
         return ResponseEntity.ok(cartService.removeCartItem(cartId, cartItemId));
     }
 
-    @PatchMapping("/decrease-item/{cartId}")
-    public ResponseEntity<?> removeFromCart(@RequestParam Long cartItemId, @PathVariable Long cartId, @RequestParam int amount){
+    @PutMapping("/decrease-item/{cartId}")
+    public ResponseEntity<?> decreaseItem(@RequestParam Long cartItemId, @PathVariable Long cartId, @RequestParam int amount){
         return ResponseEntity.ok(cartService.decreaseItem(cartId, cartItemId, amount));
     }
 }
