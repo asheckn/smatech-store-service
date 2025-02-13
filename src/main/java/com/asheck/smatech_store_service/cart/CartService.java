@@ -4,6 +4,7 @@ package com.asheck.smatech_store_service.cart;
 import com.asheck.smatech_store_service.cart.cart_item.CartItem;
 import com.asheck.smatech_store_service.cart.cart_item.CartItemDto;
 
+import com.asheck.smatech_store_service.cart.cart_item.CartItemRepository;
 import com.asheck.smatech_store_service.helper.RestTemplateService;
 import com.asheck.smatech_store_service.product.Product;
 import com.asheck.smatech_store_service.product.ProductService;
@@ -23,6 +24,8 @@ import java.util.List;
 public class CartService {
 
     private final CartRepository cartRepository;
+
+    private final CartItemRepository cartItemRepository;
 
     private final ProductService productService;
 
@@ -61,6 +64,20 @@ public class CartService {
         if(product.getStock() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product is out of stock");
         }
+
+        //Check if product is already in cart and increment it
+        for (CartItem item : cart.getItems()) {
+            if (item.getProduct().getId() == cartItemDto.productId()) {
+                item.setQuantity(item.getQuantity() + cartItemDto.quantity());
+                item.setTotal(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                item.setVatAmount(product.getVatRate().multiply(product.getPrice()).multiply(BigDecimal.valueOf(item.getQuantity())));
+                calculateTotal(cart);
+                return cartRepository.save(cart);
+            }
+        }
+
+
+
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setProduct(product);
@@ -92,6 +109,27 @@ public class CartService {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
         CartItem cartItem = cart.getItems().stream().filter(item -> item.getId() == cartItemId).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart item not found"));
         cart.getItems().remove(cartItem);
+
+        calculateTotal(cart);
+        cartRepository.save(cart);
+        return cart;
+    }
+
+    public Cart decreaseItem(Long cartId, Long cartItemId, int value){
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart not found"));
+        CartItem cartItem = cart.getItems().stream().filter(item -> item.getId() == cartItemId).findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart item not found"));
+
+        cartItem.setQuantity(cartItem.getQuantity() - value);
+
+        if(cartItem.getQuantity() <= 0){
+            cart.getItems().remove(cartItem);
+        }
+        //Calculate totals
+        cartItem.setTotal(cartItem.getProduct().getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+        cartItem.setVatAmount(cartItem.getProduct().getVatRate().multiply(cartItem.getProduct().getPrice()).multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+
+        cartItemRepository.save(cartItem);
+
         calculateTotal(cart);
         cartRepository.save(cart);
         return cart;
