@@ -32,9 +32,9 @@ public class OrderController {
     }
 
     //Create Order
-    @PostMapping("/create-order")
+    @PostMapping("/create-order/{cartId}")
     public ResponseEntity<?> createOrder(
-            @RequestParam Long cartId
+            @PathVariable Long cartId
     ){
         StoreOrder order = orderService.createOrder(cartId);
         return ResponseEntity.ok(new ApiResponse<>(true, "Order created successfully", order));
