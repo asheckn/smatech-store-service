@@ -39,7 +39,10 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/update-category", consumes = "multipart/form-data")
-    public ResponseEntity<?> updateCategory(@RequestParam("image") MultipartFile image, @RequestParam String name, @RequestParam long categoryId) throws IOException {
+    public ResponseEntity<?> updateCategory(
+            @RequestParam(value = "image", required = false) MultipartFile image,
+            @RequestParam(required = false) String name,
+            @RequestParam long categoryId) throws IOException {
         Category updateCategory = categoryService.updateCategory(name, image, categoryId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true, "Category updated successfully", updateCategory));
