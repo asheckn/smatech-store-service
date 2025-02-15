@@ -26,10 +26,13 @@ services:
       WEB_CORS_ALLOWED_METHODS: "GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD"
       WEB_CORS_ALLOWED_HEADERS: "Requestor-Type"
       WEB_CORS_EXPOSED_HEADERS: "X-Get-Header"
+      FOLDER_SAVE_PATH: "/app/uploads/"
 #      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
       DEFAULT_EUREKA_ZONE: "http://eureka-server:8761/eureka/"
     ports:
       - "8082:8082"
+    volumes:
+      - app_data:/app/uploads
     restart: always
     networks:
       - smatech
@@ -53,3 +56,6 @@ services:
 
 #volumes:
 #  postgres_data:
+
+volumes:
+  app_data:

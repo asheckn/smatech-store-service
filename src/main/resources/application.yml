@@ -46,7 +46,7 @@ web:
     allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
     max-age: 3600
     allowed-headers: "*"
-    exposed-headers: "X-Get-Header"
+    exposed-headers: "*"
 folder-path: src/main/resources/static/uploads/
 
 auth:
